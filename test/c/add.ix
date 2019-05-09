@@ -1,0 +1,13 @@
+a = 3
+b = 5
+arg a
+arg b
+call add
+c = t0
+asm ".puti c\n.exit"
+function add
+param x
+param y
+t1 = x + y
+return t1
+fend

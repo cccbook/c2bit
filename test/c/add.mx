@@ -1,0 +1,14 @@
+.setc a = 3
+.setc b = 5
+.arg  a (null)
+.arg  b (null)
+.call add
+.set  c = t0
+.puti c
+.exit
+.function (null)
+.param x
+.param y
+.op   t1 = x + y
+.ret t1
+.fend (null)
