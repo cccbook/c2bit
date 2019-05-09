@@ -1,14 +1,15 @@
 .setc a = 3
 .setc b = 5
-.arg  a (null)
-.arg  b (null)
+.arg 0 a
+.arg 1 b
 .call add
 .set  c = t0
 .puti c
 .exit
-.function (null)
-.param x
-.param y
+.function add
+.param 0 x
+.param 1 y
+.local 0 t1
 .op   t1 = x + y
-.ret t1
-.fend (null)
+.ret t1 add
+.fend add

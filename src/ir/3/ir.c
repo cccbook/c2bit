@@ -25,6 +25,7 @@ void irWrite(FILE *fp, IR *p) {
     case IrCall: fprintf(fp, "call %s", p0); break;
     case IrArg:  fprintf(fp, "arg %s", p0); break;
     case IrParam: fprintf(fp, "param %s", p0); break;
+    case IrLocal: fprintf(fp, "local %s", p0); break;
     case IrFunction: fprintf(fp, "function %s", p0); break;
     case IrFend: fprintf(fp, "fend"); break;
     case IrReturn: fprintf(fp, "return %s", p0); break;
@@ -50,6 +51,7 @@ void irDump() {
 }
 
 char *fname = NULL;
+int argIdx, paramIdx, localIdx;
 
 void ir2macro(FILE *fp, IR *p) {
   char* p0=p->p0, *p1=p->p1, *p2=p->p2, *str = p->str;
@@ -85,15 +87,21 @@ void ir2macro(FILE *fp, IR *p) {
       break;
     case IrCall:
       fprintf(fp, ".call %s", p0); // t = call fname
+      argIdx = 0;
       break;
     case IrArg:
-      fprintf(fp, ".arg  %s %s", p0, p1); // arg i t
+      fprintf(fp, ".arg %d %s", argIdx++, p0); // arg i t
       break;
     case IrParam:
-      fprintf(fp, ".param %s", p0); // param var
+      fprintf(fp, ".param %d %s", paramIdx++, p0); // param var
+      break;
+    case IrLocal:
+      fprintf(fp, ".local %d %s", localIdx++, p0); // param var
       break;
     case IrFunction:
-      fname = str;
+      fname = p0;
+      paramIdx = 0;
+      localIdx = 0;
       fprintf(fp, ".function %s", fname);
       break;
     case IrFend:
@@ -101,7 +109,7 @@ void ir2macro(FILE *fp, IR *p) {
       fname = NULL;
       break;
     case IrReturn:
-      fprintf(fp, ".ret %s", p0);
+      fprintf(fp, ".ret %s %s", p0, fname);
       break;
     default: 
       error("ir.type %d not found!", p->op);
@@ -110,6 +118,7 @@ void ir2macro(FILE *fp, IR *p) {
 }
 
 void ir2m(char *mFile) {
+  argIdx=0; paramIdx=0; localIdx = 0;
   FILE *mF = fopen(mFile, "w");
   for (int i=0; i<irTop; i++) {
     ir2macro(mF, &ir[i]);

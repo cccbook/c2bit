@@ -11,7 +11,7 @@
 #define VAR_MAX 10000
 #define IR_MAX  10000
 
-typedef enum { IrAssign, IrOp2, IrLabel, IrGoto, IrIfGoto, IrIfNotGoto, IrAsm, IrCall, IrArg, IrReturn, IrParam, IrFunction, IrFend } IrOp;
+typedef enum { IrAssign, IrOp2, IrLabel, IrGoto, IrIfGoto, IrIfNotGoto, IrAsm, IrCall, IrArg, IrReturn, IrParam, IrLocal, IrFunction, IrFend } IrOp;
 
 typedef struct {
   IrOp op;

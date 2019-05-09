@@ -8,6 +8,7 @@ asm ".puti c\n.exit"
 function add
 param x
 param y
+local t1
 t1 = x + y
 return t1
 fend

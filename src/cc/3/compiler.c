@@ -3,6 +3,7 @@
 
 #define _ NULL
 
+char scope = 'G';
 char* EXP();
 char* E();
 char* CALL(char *fname);
@@ -16,7 +17,9 @@ Token tnow, tnext;
 int tempIdx = 1, labelIdx = 1;
 
 char* nextTemp() {
-  return stPrint("t%d", tempIdx++);
+  char *p = stPrint("t%d", tempIdx++);
+  if (scope == 'L') irEmit(IrLocal, p, _, _, _);
+  return p;
 }
 
 char *nextLabel() {
@@ -252,6 +255,7 @@ void PARAMS() {
 
 // FUNCTION = def id (PARAMS) BLOCK
 void FUNCTION() {
+  scope = 'L';
   skip("def");
   char *id = skipType(Id);
   irEmit(IrFunction, id, _, _, _);
@@ -260,6 +264,7 @@ void FUNCTION() {
   skip(")");
   BLOCK();
   irEmit(IrFend, _, _, _, _);
+  scope = 'G';
 }
 
 // PROG = STMT*
